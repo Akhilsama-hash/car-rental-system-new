@@ -1,0 +1,6 @@
+1,Maruti Swift,Hatchback,1200,All Cities,false
+2,Honda City,Sedan,1800,All Cities,true
+3,Hyundai Creta,SUV,2500,All Cities,true
+4,Tata Nexon,SUV,2200,All Cities,true
+5,Mahindra XUV300,SUV,2800,All Cities,true
+6,Kia Seltos,SUV,3200,All Cities,true

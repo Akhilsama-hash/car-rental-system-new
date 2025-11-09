@@ -1,0 +1,1616 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drive Now</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background: linear-gradient(135deg, #1e293b 0%, #334155 50%, #475569 100%);
+            min-height: 100vh;
+            color: #f8fafc;
+        }
+        .nav { 
+            background: #0f172a; 
+            padding: 1rem 2rem; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            border-bottom: 2px solid #1e40af;
+        }
+        .brand { font-size: 1.8rem; font-weight: bold; color: #60a5fa; text-shadow: 0 0 10px rgba(96, 165, 250, 0.3); }
+        .dot { color: #ef4444; }
+        .btn { 
+            padding: 0.75rem 1.5rem; 
+            border: none; 
+            border-radius: 8px; 
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%); 
+            color: white; 
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+        }
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+        }
+        .container { 
+            max-width: 1200px; 
+            margin: 0 auto; 
+            padding: 2rem;
+            background: rgba(15, 23, 42, 0.8);
+            border-radius: 20px;
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+        .dashboard-header { margin-bottom: 2rem; text-align: center; }
+        .dashboard-header h1 { color: #f1f5f9; font-size: 2.5rem; margin-bottom: 0.5rem; text-shadow: 0 0 20px rgba(96, 165, 250, 0.5); font-weight: 700; }
+        .cars-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); 
+            gap: 2rem; 
+        }
+        .car-card { 
+            background: linear-gradient(145deg, #1e293b 0%, #334155 100%); 
+            border-radius: 16px; 
+            overflow: hidden; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(59, 130, 246, 0.2);
+        }
+        .car-card:hover { transform: translateY(-8px); box-shadow: 0 15px 40px rgba(0,0,0,0.5); border-color: rgba(59, 130, 246, 0.4); }
+        .car-image { 
+            height: 200px; 
+            background-size: cover;
+            background-position: center;
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            font-size: 4rem;
+            position: relative;
+            overflow: hidden;
+            background-color: #f8fafc;
+        }
+        .car-image::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, rgba(30, 64, 175, 0.3), rgba(59, 130, 246, 0.3));
+        }
+        .car-image span {
+            position: relative;
+            z-index: 1;
+        }
+        .car-info { padding: 1.5rem; }
+        .car-info h3 { font-size: 1.5rem; margin-bottom: 0.5rem; color: #f1f5f9; font-weight: 600; }
+        .car-type { color: #94a3b8; margin-bottom: 0.5rem; font-weight: 500; }
+        .car-location { color: #60a5fa; font-weight: 600; margin-bottom: 1rem; }
+        .car-price { 
+            font-size: 1.8rem; 
+            font-weight: bold; 
+            color: #10b981; 
+            margin-bottom: 1rem;
+            text-shadow: 0 0 10px rgba(16, 185, 129, 0.3);
+        }
+        .btn-book { background: linear-gradient(135deg, #059669 0%, #10b981 100%); width: 100%; }
+        .btn-book:hover { background: #047857; }
+        .login-section { 
+            background: linear-gradient(145deg, #1e293b 0%, #334155 100%); 
+            padding: 2rem; 
+            border-radius: 12px; 
+            box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+            max-width: 400px;
+            margin: 2rem auto;
+            text-align: center;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+        }
+        .form-group { margin-bottom: 1rem; }
+        .form-group input { 
+            width: 100%; 
+            padding: 0.75rem; 
+            border: 2px solid #475569; 
+            border-radius: 8px;
+            background: #0f172a;
+            color: #f1f5f9;
+            transition: border-color 0.3s ease;
+        }
+        .form-group input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        .hidden { display: none; }
+        .admin-panel {
+            background: rgba(15, 23, 42, 0.9);
+            padding: 2rem;
+            border-radius: 12px;
+            margin: 2rem 0;
+            border: 2px solid rgba(59, 130, 246, 0.3);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+        }
+        .admin-form {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            align-items: end;
+        }
+        .admin-form input, .admin-form select {
+            padding: 0.75rem;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 8px;
+            background: rgba(255,255,255,0.9);
+        }
+        .remove-btn {
+            background: #ef4444;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-top: 1rem;
+        }
+        .remove-btn:hover {
+            background: #dc2626;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+        .modal-content {
+            background-color: white;
+            margin: 5% auto;
+            padding: 2rem;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 600px;
+            position: relative;
+        }
+        .close {
+            position: absolute;
+            right: 1rem;
+            top: 1rem;
+            font-size: 2rem;
+            cursor: pointer;
+            color: #64748b;
+        }
+        .calendar {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 0.5rem;
+            margin: 1rem 0;
+        }
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        .calendar-header h4 {
+            color: #1f2937;
+            font-weight: 600;
+            margin: 0;
+        }
+        .calendar-header button {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        .calendar-header button:hover {
+            background: #2563eb;
+        }
+        .calendar-day {
+            padding: 0.75rem;
+            text-align: center;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            cursor: pointer;
+            background: white;
+            color: #1f2937;
+            font-weight: 500;
+        }
+        .calendar-day:hover {
+            background: #f1f5f9;
+        }
+        .calendar-day.selected {
+            background: #3b82f6;
+            color: white;
+        }
+        .calendar-day.disabled {
+            background: #f9fafb;
+            color: #9ca3af;
+            cursor: not-allowed;
+        }
+        .date-input-section {
+            margin: 1rem 0;
+            padding: 1rem;
+            background: #f8fafc;
+            border-radius: 8px;
+        }
+        .filters-section {
+            display: flex;
+            gap: 2rem;
+            justify-content: center;
+            margin: 2rem 0;
+            flex-wrap: wrap;
+        }
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .filter-group label {
+            font-weight: 600;
+            color: white;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+        }
+        .filter-group select {
+            padding: 0.75rem;
+            border-radius: 8px;
+            border: 2px solid rgba(255,255,255,0.3);
+            background: rgba(255,255,255,0.9);
+            min-width: 150px;
+        }
+        .user-panel {
+            background: rgba(15, 23, 42, 0.9);
+            padding: 2rem;
+            border-radius: 12px;
+            margin: 2rem 0;
+            border: 2px solid rgba(59, 130, 246, 0.3);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+        }
+        .tab-nav {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            justify-content: center;
+        }
+        .tab-btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .tab-btn.active {
+            background: #3b82f6;
+        }
+        .tab-content {
+            background: linear-gradient(145deg, #334155 0%, #475569 100%);
+            padding: 2rem;
+            border-radius: 12px;
+            color: #f1f5f9;
+            border: 1px solid rgba(59, 130, 246, 0.2);
+        }
+        .booking-card {
+            background: linear-gradient(145deg, #1e293b 0%, #334155 100%);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            color: #f1f5f9;
+        }
+        .profile-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+        }
+        .info-item {
+            background: linear-gradient(145deg, #1e293b 0%, #334155 100%);
+            padding: 1rem;
+            border-radius: 8px;
+            border-left: 4px solid #60a5fa;
+            color: #f1f5f9;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+    </style>
+</head>
+<body>
+    <nav class="nav">
+        <div class="brand">Drive Now</div>
+        <div>
+            <span id="welcome-msg"></span>
+            <button id="login-btn" class="btn" onclick="showLogin()">Login</button>
+            <button id="logout-btn" class="btn hidden" onclick="logout()">Logout</button>
+        </div>
+    </nav>
+
+    <!-- Car Preview Section (Before Login) -->
+    <div id="preview-section" class="container">
+        <div class="dashboard-header">
+            <h1>Available Cars</h1>
+            <p style="color: rgba(255,255,255,0.9); font-size: 1.1rem;">Login to book your perfect ride</p>
+        </div>
+        <div id="preview-cars-grid" class="cars-grid">
+            <!-- Cars will be loaded here -->
+        </div>
+        <div style="text-align: center; margin-top: 2rem;">
+            <button class="btn" onclick="showLogin()" style="font-size: 1.2rem; padding: 1rem 2rem;">Login to Book Cars</button>
+
+        </div>
+    </div>
+
+    <!-- Login Section -->
+    <div id="login-section" class="login-section hidden">
+        <h2 id="auth-title">Login to Drive Now</h2>
+        <div id="login-form">
+            <div class="form-group">
+                <input type="text" id="username" placeholder="Username" />
+            </div>
+            <div class="form-group">
+                <input type="password" id="password" placeholder="Password" />
+            </div>
+            <button class="btn" onclick="login()">Sign In</button>
+            <div style="margin-top: 1rem;">
+                <button class="btn" onclick="showRegister()" style="background: #059669;">New User? Register</button>
+            </div>
+        </div>
+        
+        <div id="register-form" class="hidden">
+            <div class="form-group">
+                <input type="text" id="reg-name" placeholder="Full Name" />
+            </div>
+            <div class="form-group">
+                <input type="email" id="reg-email" placeholder="name@gmail.com" />
+            </div>
+            <div class="form-group">
+                <input type="password" id="reg-password" placeholder="Password" />
+            </div>
+            <div class="form-group">
+                <input type="tel" id="reg-phone" placeholder="Phone Number" />
+            </div>
+            <div class="form-group">
+                <input type="date" id="reg-dob" placeholder="Date of Birth" />
+            </div>
+            <button class="btn" onclick="register()">Register</button>
+            <div style="margin-top: 1rem;">
+                <button class="btn" onclick="showLogin()" style="background: #6b7280;">Back to Login</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- User Panel Section -->
+    <div id="user-panel-section" class="container hidden">
+        <div class="dashboard-header">
+            <h1>My Dashboard</h1>
+        </div>
+        
+        <div class="user-panel">
+            <div class="tab-nav">
+                <button class="tab-btn active" onclick="showTab('profile')">My Profile</button>
+                <button class="tab-btn" onclick="showTab('bookings')">My Bookings</button>
+                <button class="tab-btn" onclick="showTab('cars')">Book Cars</button>
+            </div>
+            
+            <div id="profile-tab" class="tab-content">
+                <h2>Profile Information</h2>
+                <div id="profile-details" class="profile-info">
+                    <!-- Profile details will be loaded here -->
+                </div>
+            </div>
+            
+            <div id="bookings-tab" class="tab-content hidden">
+                <h2>My Bookings</h2>
+                <div id="bookings-list">
+                    <!-- Bookings will be loaded here -->
+                </div>
+            </div>
+            
+            <div id="cars-tab" class="tab-content hidden">
+                <h2>Available Cars</h2>
+                <div class="cars-grid">
+                    <!-- Cars will be loaded here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dashboard Section -->
+    <div id="dashboard-section" class="container hidden">
+        <div class="dashboard-header">
+            <h1>Drive Now - Available Cars</h1>
+            <p style="color: rgba(255,255,255,0.9); font-size: 1.1rem;">Choose from our premium fleet - Available in all major cities including Mumbai, Delhi, Bangalore, Chennai, Pune, Hyderabad & Kolkata</p>
+            
+            <!-- Filters -->
+            <div class="filters-section">
+                <div class="filter-group">
+                    <label>Location:</label>
+                    <select id="location-filter" onchange="applyFilters()">
+                        <option value="">All Locations</option>
+                        <option value="Mumbai">Mumbai</option>
+                        <option value="Delhi">Delhi</option>
+                        <option value="Bangalore">Bangalore</option>
+                        <option value="Chennai">Chennai</option>
+                        <option value="Pune">Pune</option>
+                        <option value="Hyderabad">Hyderabad</option>
+                        <option value="Kolkata">Kolkata</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>Car Type:</label>
+                    <select id="type-filter" onchange="applyFilters()">
+                        <option value="">All Types</option>
+                        <option value="Hatchback">Hatchback</option>
+                        <option value="Sedan">Sedan</option>
+                        <option value="SUV">SUV</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>Price Range:</label>
+                    <select id="price-filter" onchange="applyFilters()">
+                        <option value="">All Prices</option>
+                        <option value="0-1500">Under ₹1,500</option>
+                        <option value="1500-2500">₹1,500 - ₹2,500</option>
+                        <option value="2500-5000">₹2,500+</option>
+                    </select>
+                </div>
+            </div>
+            
+            <!-- Admin Panel -->
+            <div id="admin-panel" class="admin-panel hidden">
+                <div class="tab-nav">
+                    <button class="tab-btn" onclick="showAdminTab('cars')">Manage Cars</button>
+                    <button class="tab-btn" onclick="showAdminTab('users')">Users</button>
+                    <button class="tab-btn active" onclick="showAdminTab('admin-bookings')">All Bookings</button>
+                </div>
+                
+                <div id="admin-cars-tab" class="tab-content">
+                    <h2>Add New Car</h2>
+                    <div class="admin-form">
+                        <input type="text" id="new-car-name" placeholder="Car Name (e.g., BMW X5)" />
+                        <select id="new-car-type">
+                            <option value="">Select Type</option>
+                            <option value="Hatchback">Hatchback</option>
+                            <option value="Sedan">Sedan</option>
+                            <option value="SUV">SUV</option>
+                            <option value="Luxury">Luxury</option>
+                        </select>
+                        <input type="number" id="new-car-price" placeholder="Price per day" />
+                        <select id="new-car-location">
+                            <option value="">Select Location</option>
+                            <option value="Mumbai">Mumbai</option>
+                            <option value="Delhi">Delhi</option>
+                            <option value="Bangalore">Bangalore</option>
+                            <option value="Chennai">Chennai</option>
+                            <option value="Pune">Pune</option>
+                        </select>
+                        <input type="url" id="new-car-image" placeholder="Image URL (optional)" />
+                        <button class="btn" onclick="addCar()">Add Car</button>
+                    </div>
+                    <div class="cars-grid" style="margin-top: 2rem;">
+                        <!-- Cars will be loaded here for management -->
+                    </div>
+                </div>
+                
+                <div id="admin-users-tab" class="tab-content hidden">
+                    <h2>Registered Users</h2>
+                    <div id="users-list">
+                        <!-- Users will be loaded here -->
+                    </div>
+                </div>
+                
+                <div id="admin-bookings-tab" class="tab-content">
+                    <h2>All Bookings</h2>
+                    <button class="btn" onclick="forceReloadBookings()" style="margin-bottom: 1rem;">Refresh Bookings</button>
+                    <button class="btn" onclick="testBookings()" style="margin-bottom: 1rem; margin-left: 1rem; background: #ef4444;">Test Display</button>
+                    <button class="btn" onclick="debugDatabase()" style="margin-bottom: 1rem; margin-left: 1rem; background: #8b5cf6;">Debug Database</button>
+                    <button class="btn" onclick="clearAllData()" style="margin-bottom: 1rem; margin-left: 1rem; background: #ef4444;">Clear All Data</button>
+                    <div id="admin-bookings-list">
+                        <!-- All bookings will be loaded here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Booking Modal -->
+    <div id="booking-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeBookingModal()">&times;</span>
+            <h2 id="booking-car-name">Book Your Car</h2>
+            
+            <div class="date-input-section">
+                <h3>Select Pickup Date</h3>
+                <div class="calendar-header">
+                    <button onclick="changeMonth(-1)">&lt;</button>
+                    <h4 id="current-month"></h4>
+                    <button onclick="changeMonth(1)">&gt;</button>
+                </div>
+                <div id="calendar" class="calendar"></div>
+                
+                <div style="margin-top: 1rem;">
+                    <p><strong>Pickup Date:</strong> <span id="pickup-date">Not selected</span></p>
+                    <p><strong>Return Date:</strong> <span id="return-date">Not selected</span></p>
+                    <div style="background: #fef3c7; border: 2px solid #f59e0b; padding: 1rem; border-radius: 8px; margin-top: 1rem;">
+                        <p style="color: #92400e; font-weight: bold; margin: 0;">Important: Return by 9:00 PM on the selected return date</p>
+                    </div>
+                </div>
+                
+                <div style="margin-top: 1rem;">
+                    <select id="booking-city" style="width: 100%; padding: 0.75rem; border: 2px solid #e2e8f0; border-radius: 8px; margin-bottom: 1rem;">
+                        <option value="">Select City</option>
+                        <option value="Mumbai">Mumbai</option>
+                        <option value="Delhi">Delhi</option>
+                        <option value="Bangalore">Bangalore</option>
+                        <option value="Chennai">Chennai</option>
+                        <option value="Pune">Pune</option>
+                        <option value="Hyderabad">Hyderabad</option>
+                        <option value="Kolkata">Kolkata</option>
+                    </select>
+                    <input type="tel" id="phone-number" placeholder="Enter your phone number" style="width: 100%; padding: 0.75rem; border: 2px solid #e2e8f0; border-radius: 8px;">
+                </div>
+                
+                <div style="margin-top: 1rem; text-align: center;">
+                    <button class="btn" onclick="confirmBooking()" style="padding: 1rem 2rem;">Confirm Booking</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showLogin() {
+            document.getElementById('preview-section').classList.add('hidden');
+            document.getElementById('login-section').classList.remove('hidden');
+            document.getElementById('dashboard-section').classList.add('hidden');
+        }
+
+        let currentUser = null;
+        let currentUserData = null;
+        let registeredUsers = [];
+        let userBookings = [];
+        
+        // Initialize data from localStorage
+        function initializeData() {
+            registeredUsers = JSON.parse(localStorage.getItem('registeredUsers')) || [];
+            userBookings = JSON.parse(localStorage.getItem('userBookings')) || [];
+            console.log('Data initialized:', userBookings.length, 'bookings,', registeredUsers.length, 'users');
+        }
+        let cars = [];
+
+        function showRegister() {
+            document.getElementById('auth-title').textContent = 'Register for Drive Now';
+            document.getElementById('login-form').classList.add('hidden');
+            document.getElementById('register-form').classList.remove('hidden');
+        }
+        
+        function showLoginForm() {
+            document.getElementById('auth-title').textContent = 'Login to Drive Now';
+            document.getElementById('login-form').classList.remove('hidden');
+            document.getElementById('register-form').classList.add('hidden');
+        }
+        
+        function register() {
+            const name = document.getElementById('reg-name').value;
+            const email = document.getElementById('reg-email').value;
+            const password = document.getElementById('reg-password').value;
+            const phone = document.getElementById('reg-phone').value;
+            const dob = document.getElementById('reg-dob').value;
+            
+            if (!name || !email || !password || !phone || !dob) {
+                alert('❌ Please fill all fields!');
+                return;
+            }
+            
+            if (!email.endsWith('@gmail.com')) {
+                alert('❌ Email must be in format: name@gmail.com');
+                return;
+            }
+            
+            if (registeredUsers.find(user => user.email === email)) {
+                alert('❌ User already exists!');
+                return;
+            }
+            
+            const newUser = {
+                id: Date.now(),
+                name: name,
+                email: email,
+                password: password,
+                phone: phone,
+                dob: dob,
+                registeredAt: new Date().toISOString()
+            };
+            
+            registeredUsers.push(newUser);
+            localStorage.setItem('registeredUsers', JSON.stringify(registeredUsers));
+            
+            alert('✅ Registration successful! Please login.');
+            showLoginForm();
+            
+            // Clear form
+            document.getElementById('reg-name').value = '';
+            document.getElementById('reg-email').value = '';
+            document.getElementById('reg-password').value = '';
+            document.getElementById('reg-phone').value = '';
+            document.getElementById('reg-dob').value = '';
+        }
+        
+        function login() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            
+            if (!username || !password) {
+                alert('❌ Please enter both username and password!');
+                return;
+            }
+            
+            // Initialize data before login check
+            initializeData();
+            
+            // Admin login
+            if (username === 'carrental' && password === 'carrental@123') {
+                currentUser = 'admin';
+                currentUserData = { name: 'Admin', email: 'admin@carrental.com' };
+                loginSuccess();
+                document.getElementById('admin-panel').classList.remove('hidden');
+                return;
+            }
+            
+            // User login
+            const user = registeredUsers.find(u => u.email === username && u.password === password);
+            if (user) {
+                currentUser = 'user';
+                currentUserData = user;
+                loginSuccess();
+                document.getElementById('admin-panel').classList.add('hidden');
+                return;
+            }
+            
+            alert('❌ Invalid credentials! Please check your email and password.');
+        }
+        
+        function loginSuccess() {
+            document.getElementById('preview-section').classList.add('hidden');
+            document.getElementById('login-section').classList.add('hidden');
+            document.getElementById('login-btn').classList.add('hidden');
+            document.getElementById('logout-btn').classList.remove('hidden');
+            document.getElementById('welcome-msg').textContent = `Hi, ${currentUserData.name}! `;
+            
+            if (currentUser === 'admin') {
+                document.getElementById('dashboard-section').classList.remove('hidden');
+                document.getElementById('user-panel-section').classList.add('hidden');
+                
+                // Initialize data for admin
+                initializeData();
+                
+                // Load initial admin data
+                loadAdminCars();
+                loadAdminUsers();
+                
+
+                
+                // Force show All Bookings tab and load bookings
+                setTimeout(() => {
+                    document.querySelectorAll('#admin-panel .tab-content').forEach(tab => tab.classList.add('hidden'));
+                    document.querySelectorAll('#admin-panel .tab-btn').forEach(btn => btn.classList.remove('active'));
+                    document.getElementById('admin-bookings-tab').classList.remove('hidden');
+                    document.querySelector('[onclick="showAdminTab(\'admin-bookings\')"]').classList.add('active');
+                    forceReloadBookings();
+                }, 100);
+            } else {
+                document.getElementById('user-panel-section').classList.remove('hidden');
+                document.getElementById('dashboard-section').classList.add('hidden');
+                loadUserProfile();
+                loadUserBookings();
+                loadCarsForUser();
+            }
+            
+            alert('✅ Login successful!');
+        }
+
+        function logout() {
+            currentUser = null;
+            currentUserData = null;
+            document.getElementById('preview-section').classList.remove('hidden');
+            document.getElementById('login-section').classList.add('hidden');
+            document.getElementById('dashboard-section').classList.add('hidden');
+            document.getElementById('user-panel-section').classList.add('hidden');
+            document.getElementById('login-btn').classList.remove('hidden');
+            document.getElementById('logout-btn').classList.add('hidden');
+            document.getElementById('welcome-msg').textContent = '';
+            document.getElementById('username').value = '';
+            document.getElementById('password').value = '';
+            document.getElementById('admin-panel').classList.add('hidden');
+            showLoginForm();
+            loadPreviewCars();
+        }
+
+        function loadAdminCars() {
+            const carsGrid = document.querySelector('#admin-cars-tab .cars-grid');
+            if (!carsGrid) return;
+            
+            carsGrid.innerHTML = '';
+            
+            cars.forEach(car => {
+                const carCard = `
+                    <div class="car-card">
+                        <div class="car-image" style="background-image: url('${car.image}');">
+                        </div>
+                        <div class="car-info">
+                            <h3>${car.name}</h3>
+                            <p class="car-type">${car.type}</p>
+                            <p class="car-location">${car.location}</p>
+                            <div class="car-price">₹${car.price}/day</div>
+                            <button class="remove-btn" onclick="removeCar(${car.id})">Remove</button>
+                        </div>
+                    </div>
+                `;
+                carsGrid.innerHTML += carCard;
+            });
+        }
+
+        async function addCar() {
+            if (currentUser !== 'admin') {
+                alert('❌ Access denied! Admin only.');
+                return;
+            }
+            
+            const name = document.getElementById('new-car-name').value;
+            const type = document.getElementById('new-car-type').value;
+            const price = document.getElementById('new-car-price').value;
+            const location = document.getElementById('new-car-location').value;
+            const image = document.getElementById('new-car-image').value || 'https://imgd.aeplcdn.com/664x374/n/cw/ec/40087/innova-crysta-exterior-right-front-three-quarter-4.jpeg';
+            
+            if (!name || !type || !price || !location) {
+                alert('⚠️ Please fill all required fields!');
+                return;
+            }
+            
+            const newCar = {
+                id: cars.length + 1,
+                name: name,
+                type: type,
+                price: parseInt(price),
+                location: location,
+                image: image
+            };
+            
+            try {
+                const response = await fetch('/api/cars', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(newCar)
+                });
+                if (response.ok) {
+                    await loadCarsFromAPI();
+                    loadAdminCars();
+                    loadPreviewCars();
+                } else {
+                    alert('❌ Failed to add car');
+                    return;
+                }
+            } catch (error) {
+                alert('❌ Error adding car: ' + error.message);
+                return;
+            }
+            
+            // Clear form
+            document.getElementById('new-car-name').value = '';
+            document.getElementById('new-car-type').value = '';
+            document.getElementById('new-car-price').value = '';
+            document.getElementById('new-car-location').value = '';
+            document.getElementById('new-car-image').value = '';
+            
+            alert('✅ Car added successfully!');
+        }
+
+        function removeCar(carId) {
+            if (currentUser !== 'admin') {
+                alert('❌ Access denied! Admin only.');
+                return;
+            }
+            
+            if (confirm('🗑️ Are you sure you want to remove this car?')) {
+                cars = cars.filter(car => car.id !== carId);
+                loadAdminCars();
+                loadPreviewCars();
+                alert('✅ Car removed successfully!');
+            }
+        }
+
+        let currentBooking = {};
+        let currentDate = new Date();
+        let selectedPickupDate = null;
+        let selectedReturnDate = null;
+        let selectingPickup = true;
+
+        function showTab(tabName) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.add('hidden'));
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            
+            // Show selected tab
+            document.getElementById(tabName + '-tab').classList.remove('hidden');
+            event.target.classList.add('active');
+        }
+        
+        let editingProfile = false;
+        
+        function loadUserProfile() {
+            const profileDetails = document.getElementById('profile-details');
+            if (editingProfile) {
+                profileDetails.innerHTML = `
+                    <div class="info-item">
+                        <h3>👤 Full Name</h3>
+                        <input type="text" id="edit-name" value="${currentUserData.name}" style="width: 100%; padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px; background: white; color: #333;">
+                    </div>
+                    <div class="info-item">
+                        <h3>📧 Email</h3>
+                        <input type="email" id="edit-email" value="${currentUserData.email}" style="width: 100%; padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px; background: white; color: #333;">
+                    </div>
+                    <div class="info-item">
+                        <h3>📱 Phone</h3>
+                        <input type="tel" id="edit-phone" value="${currentUserData.phone}" style="width: 100%; padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px; background: white; color: #333;">
+                    </div>
+                    <div class="info-item">
+                        <h3>🎂 Date of Birth</h3>
+                        <input type="date" id="edit-dob" value="${currentUserData.dob}" style="width: 100%; padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px; background: white; color: #333;">
+                    </div>
+                    <div class="info-item">
+                        <h3>📅 Member Since</h3>
+                        <p>${new Date(currentUserData.registeredAt).toLocaleDateString()}</p>
+                    </div>
+                    <div style="grid-column: 1 / -1; text-align: center; margin-top: 1rem;">
+                        <button class="btn" onclick="saveProfile()" style="margin-right: 1rem;">Save Changes</button>
+                        <button class="btn" onclick="cancelEdit()" style="background: #6b7280;">Cancel</button>
+                    </div>
+                `;
+            } else {
+                profileDetails.innerHTML = `
+                    <div class="info-item">
+                        <h3>👤 Full Name</h3>
+                        <p>${currentUserData.name}</p>
+                    </div>
+                    <div class="info-item">
+                        <h3>📧 Email</h3>
+                        <p>${currentUserData.email}</p>
+                    </div>
+                    <div class="info-item">
+                        <h3>📱 Phone</h3>
+                        <p>${currentUserData.phone}</p>
+                    </div>
+                    <div class="info-item">
+                        <h3>🎂 Date of Birth</h3>
+                        <p>${new Date(currentUserData.dob).toLocaleDateString()}</p>
+                    </div>
+                    <div class="info-item">
+                        <h3>📅 Member Since</h3>
+                        <p>${new Date(currentUserData.registeredAt).toLocaleDateString()}</p>
+                    </div>
+                    <div style="grid-column: 1 / -1; text-align: center; margin-top: 1rem;">
+                        <button class="btn" onclick="editProfile()">Edit Profile</button>
+                    </div>
+                `;
+            }
+        }
+        
+        function editProfile() {
+            editingProfile = true;
+            loadUserProfile();
+        }
+        
+        function cancelEdit() {
+            editingProfile = false;
+            loadUserProfile();
+        }
+        
+        function saveProfile() {
+            const name = document.getElementById('edit-name').value;
+            const email = document.getElementById('edit-email').value;
+            const phone = document.getElementById('edit-phone').value;
+            const dob = document.getElementById('edit-dob').value;
+            
+            if (!name || !email || !phone || !dob) {
+                alert('❌ Please fill all fields!');
+                return;
+            }
+            
+            if (!email.endsWith('@gmail.com')) {
+                alert('❌ Email must be in format: name@gmail.com');
+                return;
+            }
+            
+            // Update current user data
+            currentUserData.name = name;
+            currentUserData.email = email;
+            currentUserData.phone = phone;
+            currentUserData.dob = dob;
+            
+            // Update in localStorage
+            const userIndex = registeredUsers.findIndex(u => u.id === currentUserData.id);
+            if (userIndex !== -1) {
+                registeredUsers[userIndex] = currentUserData;
+                localStorage.setItem('registeredUsers', JSON.stringify(registeredUsers));
+            }
+            
+            // Update welcome message
+            document.getElementById('welcome-msg').textContent = `Hi, ${currentUserData.name}! `;
+            
+            editingProfile = false;
+            loadUserProfile();
+            
+            // Refresh admin users list if admin is logged in
+            if (currentUser === 'admin') {
+                loadAdminUsers();
+            }
+            
+            alert('✅ Profile updated successfully!');
+        }
+        
+        function loadUserBookings() {
+            const bookingsList = document.getElementById('bookings-list');
+            const userBookingsList = userBookings.filter(booking => booking.userId === currentUserData.id);
+            
+            if (userBookingsList.length === 0) {
+                bookingsList.innerHTML = '<p style="text-align: center; color: #64748b;">No bookings yet. Book your first car!</p>';
+                return;
+            }
+            
+            bookingsList.innerHTML = userBookingsList.map(booking => `
+                <div class="booking-card">
+                    <h3>🚗 ${booking.carModel}</h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-top: 1rem;">
+                        <div><strong>📍 Location:</strong> ${booking.location}</div>
+                        <div><strong>📅 Pickup:</strong> ${new Date(booking.pickupDate).toLocaleDateString()}</div>
+                        <div><strong>📅 Return:</strong> ${new Date(booking.returnDate).toLocaleDateString()}</div>
+                        <div><strong>📊 Duration:</strong> ${booking.days} days</div>
+                        <div><strong>💰 Total Cost:</strong> ₹${booking.totalCost.toLocaleString()}</div>
+                        <div><strong>📱 Phone:</strong> ${booking.phone}</div>
+                    </div>
+                    <div style="margin-top: 1rem; font-size: 0.9rem; color: #64748b;">
+                        Booked on: ${new Date(booking.bookedAt).toLocaleDateString()}
+                    </div>
+                    ${!booking.returned ? `
+                        <div style="margin-top: 1rem;">
+                            <button class="btn" onclick="returnCar(${booking.id})" style="background: #f59e0b;">Return Car</button>
+                        </div>
+                    ` : `
+                        <div style="margin-top: 1rem; padding: 0.75rem; background: #059669; color: white; border-radius: 6px; text-align: center;">
+                            ✅ Car Returned Successfully
+                        </div>
+                    `}
+                </div>
+            `).join('');
+        }
+        
+        function loadCarsForUser() {
+            const carsGrid = document.querySelector('#cars-tab .cars-grid');
+            carsGrid.innerHTML = '';
+            
+            cars.forEach(car => {
+                const carCard = `
+                    <div class="car-card">
+                        <div class="car-image" style="background-image: url('${car.image}');">
+                        </div>
+                        <div class="car-info">
+                            <h3>${car.name}</h3>
+                            <p class="car-type">${car.type}</p>
+                            <p class="car-location">${car.location}</p>
+                            <div class="car-price">₹${car.price}/day</div>
+                            <button class="btn btn-book" onclick="bookCar('${car.name}', '${car.location}', ${car.price})">Book Now</button>
+                        </div>
+                    </div>
+                `;
+                carsGrid.innerHTML += carCard;
+            });
+        }
+        
+        function bookCar(carModel, location, dailyRate) {
+            if (!currentUser) {
+                alert('❌ Please login to book cars!');
+                return;
+            }
+            
+            currentBooking = { carModel, location, dailyRate };
+            document.getElementById('booking-car-name').textContent = `Book ${carModel}`;
+            document.getElementById('booking-modal').style.display = 'block';
+            selectedPickupDate = null;
+            selectedReturnDate = null;
+            selectingPickup = true;
+            updateCalendar();
+            updateDateDisplay();
+        }
+
+        function closeBookingModal() {
+            document.getElementById('booking-modal').style.display = 'none';
+            document.getElementById('phone-number').value = '';
+            document.getElementById('booking-city').value = '';
+        }
+
+        function changeMonth(direction) {
+            currentDate.setMonth(currentDate.getMonth() + direction);
+            updateCalendar();
+        }
+
+        function updateCalendar() {
+            const calendar = document.getElementById('calendar');
+            const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
+                              'July', 'August', 'September', 'October', 'November', 'December'];
+            
+            document.getElementById('current-month').textContent = 
+                `${monthNames[currentDate.getMonth()]} ${currentDate.getFullYear()}`;
+            
+            const firstDay = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+            const lastDay = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
+            const startDate = new Date(firstDay);
+            startDate.setDate(startDate.getDate() - firstDay.getDay());
+            
+            calendar.innerHTML = '';
+            
+            // Add day headers
+            const dayHeaders = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+            dayHeaders.forEach(day => {
+                const dayHeader = document.createElement('div');
+                dayHeader.textContent = day;
+                dayHeader.style.fontWeight = 'bold';
+                dayHeader.style.padding = '0.5rem';
+                dayHeader.style.textAlign = 'center';
+                calendar.appendChild(dayHeader);
+            });
+            
+            // Add calendar days
+            for (let i = 0; i < 42; i++) {
+                const date = new Date(startDate);
+                date.setDate(startDate.getDate() + i);
+                
+                const dayElement = document.createElement('div');
+                dayElement.className = 'calendar-day';
+                dayElement.textContent = date.getDate();
+                
+                const today = new Date();
+                const isCurrentMonth = date.getMonth() === currentDate.getMonth();
+                const isPast = date < today.setHours(0,0,0,0);
+                
+                if (!isCurrentMonth || isPast) {
+                    dayElement.classList.add('disabled');
+                } else {
+                    const year = date.getFullYear();
+                    const month = String(date.getMonth() + 1).padStart(2, '0');
+                    const day = String(date.getDate()).padStart(2, '0');
+                    const dateStr = `${year}-${month}-${day}`;
+                    
+                    if ((selectedPickupDate && dateStr === selectedPickupDate) || 
+                        (selectedReturnDate && dateStr === selectedReturnDate)) {
+                        dayElement.classList.add('selected');
+                    }
+                    
+                    dayElement.onclick = () => selectDate(dateStr);
+                }
+                
+                calendar.appendChild(dayElement);
+            }
+        }
+
+        function selectDate(dateStr) {
+            if (selectingPickup) {
+                selectedPickupDate = dateStr;
+                selectingPickup = false;
+                alert('✅ Pickup date selected. Now select return date.');
+            } else {
+                if (new Date(dateStr) <= new Date(selectedPickupDate)) {
+                    alert('❌ Return date must be after pickup date!');
+                    return;
+                }
+                selectedReturnDate = dateStr;
+                selectingPickup = true;
+            }
+            updateCalendar();
+            updateDateDisplay();
+        }
+
+        function updateDateDisplay() {
+            document.getElementById('pickup-date').textContent = 
+                selectedPickupDate ? new Date(selectedPickupDate).toLocaleDateString() : 'Not selected';
+            document.getElementById('return-date').textContent = 
+                selectedReturnDate ? new Date(selectedReturnDate).toLocaleDateString() : 'Not selected';
+        }
+
+        // Check if car is available for booking
+        function isCarAvailable(carModel, city, pickupDate, returnDate) {
+            const existingBookings = userBookings.filter(booking => 
+                booking.carModel === carModel && 
+                booking.location === city && 
+                !booking.returned && // Only check active bookings
+                booking.status !== 'Completed'
+            );
+            
+            const newPickup = new Date(pickupDate);
+            const newReturn = new Date(returnDate);
+            
+            for (let booking of existingBookings) {
+                const existingPickup = new Date(booking.pickupDate);
+                const existingReturn = new Date(booking.returnDate);
+                
+                // Check for date overlap
+                if (newPickup <= existingReturn && newReturn >= existingPickup) {
+                    return false; // Dates overlap, car not available
+                }
+            }
+            
+            return true; // Car is available
+        }
+        
+        function confirmBooking() {
+            if (!selectedPickupDate || !selectedReturnDate) {
+                alert('Please select both pickup and return dates!');
+                return;
+            }
+            
+            const city = document.getElementById('booking-city').value;
+            const phone = document.getElementById('phone-number').value;
+            
+            if (!city) {
+                alert('Please select a city!');
+                return;
+            }
+            
+            if (!phone) {
+                alert('Please enter your phone number!');
+                return;
+            }
+            
+            // Check car availability
+            if (!isCarAvailable(currentBooking.carModel, city, selectedPickupDate, selectedReturnDate)) {
+                alert('❌ Sorry! This car is already booked for the selected dates in ' + city + '. Please choose different dates or another car.');
+                return;
+            }
+            
+            // Calculate days and total cost
+            const start = new Date(selectedPickupDate);
+            const end = new Date(selectedReturnDate);
+            const days = Math.ceil((end - start) / (1000 * 60 * 60 * 24));
+            const totalCost = days * currentBooking.dailyRate;
+            
+            // Save booking for user
+            if (currentUser === 'user') {
+                const booking = {
+                    id: Date.now(),
+                    userId: currentUserData.id,
+                    userName: currentUserData.name,
+                    carModel: currentBooking.carModel,
+                    location: city,
+                    pickupDate: selectedPickupDate,
+                    returnDate: selectedReturnDate,
+                    days: days,
+                    totalCost: totalCost,
+                    phone: phone,
+                    bookedAt: new Date().toISOString(),
+                    status: 'Pending'
+                };
+                
+                userBookings.push(booking);
+                localStorage.setItem('userBookings', JSON.stringify(userBookings));
+                console.log('Booking saved:', booking);
+                console.log('Total bookings now:', userBookings.length);
+                
+                // Refresh bookings display
+                loadUserBookings();
+            }
+            
+            alert('Booking Confirmed!\n\n' +
+                  'Car: ' + currentBooking.carModel + '\n' +
+                  'City: ' + city + '\n' +
+                  'Pickup: ' + new Date(selectedPickupDate).toLocaleDateString() + '\n' +
+                  'Return: ' + new Date(selectedReturnDate).toLocaleDateString() + ' by 9:00 PM\n' +
+                  'Duration: ' + days + ' days\n' +
+                  'Total Cost: ₹' + totalCost.toLocaleString() + '\n' +
+                  'Contact: ' + phone + '\n\n' +
+                  'IMPORTANT: Please return the car by 9:00 PM on ' + new Date(selectedReturnDate).toLocaleDateString() + '\n' +
+                  'Confirmation details will be sent to you!');
+            
+            closeBookingModal();
+        }
+
+        function loadPreviewCars() {
+            const previewGrid = document.getElementById('preview-cars-grid');
+            previewGrid.innerHTML = '';
+            
+            cars.forEach(car => {
+                const carCard = `
+                    <div class="car-card">
+                        <div class="car-image" style="background-image: url('${car.image}');">
+                        </div>
+                        <div class="car-info">
+                            <h3>${car.name}</h3>
+                            <p class="car-type">${car.type}</p>
+                            <p class="car-location">${car.location}</p>
+                            <div class="car-price">₹${car.price}/day</div>
+                            <button class="btn btn-book" onclick="showLogin()">Login to Book</button>
+                        </div>
+                    </div>
+                `;
+                previewGrid.innerHTML += carCard;
+            });
+        }
+
+        function applyFilters() {
+            const locationFilter = document.getElementById('location-filter').value;
+            const typeFilter = document.getElementById('type-filter').value;
+            const priceFilter = document.getElementById('price-filter').value;
+            
+            const filteredCars = cars.filter(car => {
+                const locationMatch = !locationFilter || car.location === locationFilter;
+                const typeMatch = !typeFilter || car.type === typeFilter;
+                
+                let priceMatch = true;
+                if (priceFilter) {
+                    const [min, max] = priceFilter.split('-').map(Number);
+                    priceMatch = car.price >= min && (max ? car.price <= max : true);
+                }
+                
+                return locationMatch && typeMatch && priceMatch;
+            });
+            
+            renderFilteredCars(filteredCars);
+        }
+        
+        function renderFilteredCars(filteredCars) {
+            const carsGrid = document.querySelector('#dashboard-section .cars-grid');
+            if (!carsGrid) return;
+            
+            carsGrid.innerHTML = '';
+            
+            filteredCars.forEach(car => {
+                const carCard = `
+                    <div class="car-card">
+                        <div class="car-image" style="background-image: url('${car.image}');">
+                        </div>
+                        <div class="car-info">
+                            <h3>${car.name}</h3>
+                            <p class="car-type">${car.type}</p>
+                            <p class="car-location">${car.location}</p>
+                            <div class="car-price">₹${car.price}/day</div>
+                            <button class="btn btn-book" onclick="bookCar('${car.name}', '${car.location}', ${car.price})">Book Now</button>
+                            ${currentUser === 'admin' ? `<button class="remove-btn" onclick="removeCar(${car.id})">Remove</button>` : ''}
+                        </div>
+                    </div>
+                `;
+                carsGrid.innerHTML += carCard;
+            });
+        }
+
+        function showAdminTab(tabName) {
+            // Reload data from localStorage before showing any admin tab
+            userBookings = JSON.parse(localStorage.getItem('userBookings')) || [];
+            registeredUsers = JSON.parse(localStorage.getItem('registeredUsers')) || [];
+            
+            // Hide all admin tabs
+            document.querySelectorAll('#admin-panel .tab-content').forEach(tab => tab.classList.add('hidden'));
+            document.querySelectorAll('#admin-panel .tab-btn').forEach(btn => btn.classList.remove('active'));
+            
+            // Show selected tab - handle both 'admin-bookings' and 'bookings' for compatibility
+            let targetTabId = 'admin-' + tabName + '-tab';
+            if (tabName === 'admin-bookings') {
+                targetTabId = 'admin-bookings-tab';
+            }
+            
+            const targetTab = document.getElementById(targetTabId);
+            if (targetTab) {
+                targetTab.classList.remove('hidden');
+            }
+            
+            // Set active button
+            const clickedButton = document.querySelector(`[onclick="showAdminTab('${tabName}')"]`);
+            if (clickedButton) {
+                clickedButton.classList.add('active');
+            }
+            
+            // Load appropriate data for the tab
+            if (tabName === 'admin-bookings') {
+                loadAdminBookings();
+            } else if (tabName === 'users') {
+                loadAdminUsers();
+            } else if (tabName === 'cars') {
+                loadAdminCars();
+            }
+        }
+        
+        function loadAdminUsers() {
+            const usersList = document.getElementById('users-list');
+            if (registeredUsers.length === 0) {
+                usersList.innerHTML = '<p style="text-align: center; color: #64748b;">No registered users yet.</p>';
+                return;
+            }
+            
+            usersList.innerHTML = registeredUsers.map(user => `
+                <div class="booking-card">
+                    <h3>👤 ${user.name}</h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-top: 1rem;">
+                        <div><strong>📧 Email:</strong> ${user.email}</div>
+                        <div><strong>📱 Phone:</strong> ${user.phone}</div>
+                        <div><strong>🎂 DOB:</strong> ${new Date(user.dob).toLocaleDateString()}</div>
+                        <div><strong>📅 Registered:</strong> ${new Date(user.registeredAt).toLocaleDateString()}</div>
+                        <div><strong>🚗 Bookings:</strong> ${userBookings.filter(b => b.userId === user.id).length}</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        function loadAdminBookings() {
+            // Force reload data every time this function is called
+            userBookings = JSON.parse(localStorage.getItem('userBookings')) || [];
+            registeredUsers = JSON.parse(localStorage.getItem('registeredUsers')) || [];
+            
+            const adminBookingsList = document.getElementById('admin-bookings-list');
+            console.log('Loading admin bookings, total bookings:', userBookings.length);
+            console.log('Bookings data:', userBookings);
+            
+            if (!adminBookingsList) {
+                console.error('admin-bookings-list element not found!');
+                return;
+            }
+            
+            if (userBookings.length === 0) {
+                adminBookingsList.innerHTML = '<p style="text-align: center; color: #64748b;">No bookings yet. Total bookings in system: ' + userBookings.length + '</p>';
+                return;
+            }
+            
+            const bookingHTML = userBookings.map(booking => {
+                const user = registeredUsers.find(u => u.id === booking.userId);
+                const userName = booking.userName || (user ? user.name : 'Unknown User');
+                const status = booking.status || (booking.returned ? 'Completed' : 'Pending');
+                const statusColor = status === 'Pending' ? '#f59e0b' : status === 'In Progress' ? '#3b82f6' : '#059669';
+                
+                return `
+                    <div style="background: linear-gradient(145deg, #1e293b 0%, #334155 100%); padding: 1.5rem; border-radius: 8px; margin-bottom: 1rem; color: #f1f5f9; border: 1px solid rgba(59, 130, 246, 0.2);">
+                        <h3 style="color: #f1f5f9; margin-bottom: 1rem;">🚗 ${booking.carModel} - ${userName}</h3>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+                            <div><strong>📍 Location:</strong> ${booking.location}</div>
+                            <div><strong>📅 Pickup:</strong> ${new Date(booking.pickupDate).toLocaleDateString()}</div>
+                            <div><strong>📅 Return:</strong> ${new Date(booking.returnDate).toLocaleDateString()}</div>
+                            <div><strong>📊 Duration:</strong> ${booking.days} days</div>
+                            <div><strong>💰 Cost:</strong> ₹${booking.totalCost.toLocaleString()}</div>
+                            <div><strong>📱 Phone:</strong> ${booking.phone}</div>
+                            <div><strong>📊 Status:</strong> <span style="color: ${statusColor}; font-weight: bold;">${status}</span></div>
+                        </div>
+                        <div style="margin-top: 1rem; font-size: 0.9rem; color: #94a3b8;">
+                            Booked on: ${new Date(booking.bookedAt).toLocaleDateString()}
+                            ${booking.returnedAt ? ` | Completed on: ${new Date(booking.returnedAt).toLocaleDateString()}` : ''}
+                        </div>
+                        ${status !== 'Completed' ? `
+                            <div style="margin-top: 1rem;">
+                                ${status === 'Pending' ? `<button onclick="updateBookingStatus(${booking.id}, 'In Progress')" style="background: #3b82f6; color: white; border: none; padding: 0.5rem 1rem; border-radius: 6px; cursor: pointer; margin-right: 0.5rem;">Start Process</button>` : ''}
+                                ${status === 'In Progress' ? `<button onclick="updateBookingStatus(${booking.id}, 'Completed')" style="background: #059669; color: white; border: none; padding: 0.5rem 1rem; border-radius: 6px; cursor: pointer;">Mark Complete</button>` : ''}
+                            </div>
+                        ` : ''}
+                    </div>
+                `;
+            }).join('');
+            
+            adminBookingsList.innerHTML = bookingHTML;
+        }
+        
+        function updateBookingStatus(bookingId, newStatus) {
+            const booking = userBookings.find(b => b.id === bookingId);
+            if (!booking) {
+                alert('❌ Booking not found!');
+                return;
+            }
+            
+            booking.status = newStatus;
+            if (newStatus === 'Completed') {
+                booking.returned = true;
+                booking.returnedAt = new Date().toISOString();
+            }
+            
+            localStorage.setItem('userBookings', JSON.stringify(userBookings));
+            loadAdminBookings();
+            
+            const statusMessages = {
+                'In Progress': '⚙️ Booking marked as In Progress!',
+                'Completed': '✅ Booking completed successfully!'
+            };
+            
+            alert(statusMessages[newStatus] || '✅ Status updated!');
+        }
+        
+        function returnCar(bookingId) {
+            const booking = userBookings.find(b => b.id === bookingId);
+            if (!booking) {
+                alert('❌ Booking not found!');
+                return;
+            }
+            
+            if (booking.returned) {
+                alert('❌ Car already returned!');
+                return;
+            }
+            
+            if (confirm('🚗 Confirm car return?')) {
+                booking.returned = true;
+                booking.returnedAt = new Date().toISOString();
+                localStorage.setItem('userBookings', JSON.stringify(userBookings));
+                
+                loadUserBookings();
+                if (currentUser === 'admin') {
+                    loadAdminBookings();
+                }
+                
+                alert('✅ Car returned successfully!');
+            }
+        }
+        
+        // Debug function to check bookings
+        function checkBookings() {
+            console.log('Current userBookings array:', userBookings);
+            console.log('LocalStorage userBookings:', localStorage.getItem('userBookings'));
+            console.log('Total bookings:', userBookings.length);
+            return userBookings;
+        }
+        
+        // Force reload bookings from localStorage
+        function forceReloadBookings() {
+            const adminBookingsList = document.getElementById('admin-bookings-list');
+            const bookingsData = JSON.parse(localStorage.getItem('userBookings')) || [];
+            const usersData = JSON.parse(localStorage.getItem('registeredUsers')) || [];
+            
+            if (adminBookingsList && bookingsData.length > 0) {
+                const bookingHTML = bookingsData.map(booking => {
+                    const user = usersData.find(u => u.id === booking.userId);
+                    const userName = booking.userName || (user ? user.name : 'Unknown User');
+                    const status = booking.status || (booking.returned ? 'Completed' : 'Pending');
+                    const statusColor = status === 'Pending' ? '#f59e0b' : status === 'In Progress' ? '#3b82f6' : '#059669';
+                    
+                    return `
+                        <div style="background: linear-gradient(145deg, #1e293b 0%, #334155 100%); padding: 1.5rem; border-radius: 8px; margin-bottom: 1rem; color: #f1f5f9; border: 1px solid rgba(59, 130, 246, 0.2);">
+                            <h3 style="color: #f1f5f9; margin-bottom: 1rem;">🚗 ${booking.carModel} - ${userName}</h3>
+                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+                                <div><strong>📍 Location:</strong> ${booking.location}</div>
+                                <div><strong>📅 Pickup:</strong> ${new Date(booking.pickupDate).toLocaleDateString()}</div>
+                                <div><strong>📅 Return:</strong> ${new Date(booking.returnDate).toLocaleDateString()}</div>
+                                <div><strong>📊 Duration:</strong> ${booking.days} days</div>
+                                <div><strong>💰 Cost:</strong> ₹${booking.totalCost.toLocaleString()}</div>
+                                <div><strong>📱 Phone:</strong> ${booking.phone}</div>
+                                <div><strong>📊 Status:</strong> <span style="color: ${statusColor}; font-weight: bold;">${status}</span></div>
+                            </div>
+                            <div style="margin-top: 1rem; font-size: 0.9rem; color: #94a3b8;">
+                                Booked on: ${new Date(booking.bookedAt).toLocaleDateString()}
+                                ${booking.returnedAt ? ` | Completed on: ${new Date(booking.returnedAt).toLocaleDateString()}` : ''}
+                            </div>
+                            ${status !== 'Completed' ? `
+                                <div style="margin-top: 1rem;">
+                                    ${status === 'Pending' ? `<button onclick="updateBookingStatus(${booking.id}, 'In Progress')" style="background: #3b82f6; color: white; border: none; padding: 0.5rem 1rem; border-radius: 6px; cursor: pointer; margin-right: 0.5rem;">Start Process</button>` : ''}
+                                    ${status === 'In Progress' ? `<button onclick="updateBookingStatus(${booking.id}, 'Completed')" style="background: #059669; color: white; border: none; padding: 0.5rem 1rem; border-radius: 6px; cursor: pointer;">Mark Complete</button>` : ''}
+                                </div>
+                            ` : ''}
+                        </div>
+                    `;
+                }).join('');
+                
+                adminBookingsList.innerHTML = bookingHTML;
+                userBookings = bookingsData;
+                registeredUsers = usersData;
+            } else if (adminBookingsList) {
+                adminBookingsList.innerHTML = '<p style="text-align: center; color: #64748b;">No bookings found.</p>';
+            }
+        }
+        
+        // Test function to directly display bookings
+        function testBookings() {
+            const adminBookingsList = document.getElementById('admin-bookings-list');
+            const bookingsData = JSON.parse(localStorage.getItem('userBookings')) || [];
+            const usersData = JSON.parse(localStorage.getItem('registeredUsers')) || [];
+            
+            if (adminBookingsList && bookingsData.length > 0) {
+                const bookingHTML = bookingsData.map(booking => {
+                    const user = usersData.find(u => u.id === booking.userId);
+                    const userName = booking.userName || (user ? user.name : 'Unknown User');
+                    const status = booking.status || (booking.returned ? 'Completed' : 'Pending');
+                    const statusColor = status === 'Pending' ? '#f59e0b' : status === 'In Progress' ? '#3b82f6' : '#059669';
+                    
+                    return `
+                        <div style="background: linear-gradient(145deg, #1e293b 0%, #334155 100%); padding: 1.5rem; border-radius: 8px; margin-bottom: 1rem; color: #f1f5f9; border: 1px solid rgba(59, 130, 246, 0.2);">
+                            <h3 style="color: #f1f5f9; margin-bottom: 1rem;">🚗 ${booking.carModel} - ${userName}</h3>
+                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+                                <div><strong>📍 Location:</strong> ${booking.location}</div>
+                                <div><strong>📅 Pickup:</strong> ${new Date(booking.pickupDate).toLocaleDateString()}</div>
+                                <div><strong>📅 Return:</strong> ${new Date(booking.returnDate).toLocaleDateString()}</div>
+                                <div><strong>📊 Duration:</strong> ${booking.days} days</div>
+                                <div><strong>💰 Cost:</strong> ₹${booking.totalCost.toLocaleString()}</div>
+                                <div><strong>📱 Phone:</strong> ${booking.phone}</div>
+                                <div><strong>📊 Status:</strong> <span style="color: ${statusColor}; font-weight: bold;">${status}</span></div>
+                            </div>
+                            <div style="margin-top: 1rem; font-size: 0.9rem; color: #94a3b8;">
+                                Booked on: ${new Date(booking.bookedAt).toLocaleDateString()}
+                                ${booking.returnedAt ? ` | Completed on: ${new Date(booking.returnedAt).toLocaleDateString()}` : ''}
+                            </div>
+                            ${status !== 'Completed' ? `
+                                <div style="margin-top: 1rem;">
+                                    ${status === 'Pending' ? `<button onclick="updateBookingStatus(${booking.id}, 'In Progress')" style="background: #3b82f6; color: white; border: none; padding: 0.5rem 1rem; border-radius: 6px; cursor: pointer; margin-right: 0.5rem;">Start Process</button>` : ''}
+                                    ${status === 'In Progress' ? `<button onclick="updateBookingStatus(${booking.id}, 'Completed')" style="background: #059669; color: white; border: none; padding: 0.5rem 1rem; border-radius: 6px; cursor: pointer;">Mark Complete</button>` : ''}
+                                </div>
+                            ` : ''}
+                        </div>
+                    `;
+                }).join('');
+                
+                adminBookingsList.innerHTML = bookingHTML;
+            }
+        }
+        
+        // Debug function to check localStorage data
+        function debugDatabase() {
+            const bookings = JSON.parse(localStorage.getItem('userBookings')) || [];
+            const users = JSON.parse(localStorage.getItem('registeredUsers')) || [];
+            
+            console.log('=== DATABASE DEBUG ===');
+            console.log('Total bookings in localStorage:', bookings.length);
+            console.log('Total users in localStorage:', users.length);
+            console.log('Bookings data:', bookings);
+            console.log('Users data:', users);
+            
+            alert(`Database Status:\n\nBookings: ${bookings.length}\nUsers: ${users.length}\n\nCheck console for detailed data`);
+            
+            return { bookings, users };
+        }
+        
+        // Clear all booking data
+        function clearAllData() {
+            localStorage.removeItem('userBookings');
+            localStorage.removeItem('registeredUsers');
+            userBookings = [];
+            registeredUsers = [];
+            
+            alert('✅ All booking data cleared!');
+            
+            // Reload displays
+            if (currentUser === 'admin') {
+                loadAdminBookings();
+                loadAdminUsers();
+            } else if (currentUser === 'user') {
+                loadUserBookings();
+            }
+        }
+        
+        // Load cars from API
+        async function loadCarsFromAPI() {
+            try {
+                const response = await fetch('/api/cars');
+                const data = await response.json();
+                cars = data;
+            } catch (error) {
+                console.error('Error loading cars:', error);
+                // Fallback to hardcoded cars if API fails
+                cars = [
+                    {id: 2, name: 'Maruti Swift', type: 'Hatchback', price: 1200, location: 'All Cities', image: '/assets/shift.jpg'},
+                    {id: 3, name: 'Toyota Innova', type: 'SUV', price: 2800, location: 'All Cities', image: '/assets/innova.jpg'},
+                    {id: 4, name: 'Hyundai Creta', type: 'SUV', price: 2500, location: 'All Cities', image: '/assets/hyundai.jpg'},
+                    {id: 6, name: 'Mahindra Thar', type: 'SUV', price: 3500, location: 'All Cities', image: '/assets/thar.jpg'},
+                    {id: 7, name: 'Mahindra XUV300', type: 'SUV', price: 2800, location: 'All Cities', image: '/assets/mahindra.jpg'},
+                    {id: 8, name: 'Kia Seltos', type: 'SUV', price: 3200, location: 'All Cities', image: '/assets/kia.jpg'}
+                ];
+            }
+        }
+
+        // Load preview cars on page load
+        window.onload = async function() {
+            initializeData();
+            await loadCarsFromAPI();
+            loadPreviewCars();
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drive Now - Car Rental</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background: linear-gradient(135deg, #1e293b 0%, #334155 50%, #475569 100%);
+            min-height: 100vh;
+            color: #f8fafc;
+        }
+        .nav { 
+            background: #0f172a; 
+            padding: 1rem 2rem; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            border-bottom: 2px solid #1e40af;
+        }
+        .brand { font-size: 1.8rem; font-weight: bold; color: #60a5fa; }
+        .container { 
+            max-width: 1200px; 
+            margin: 0 auto; 
+            padding: 2rem;
+            background: rgba(15, 23, 42, 0.8);
+            border-radius: 20px;
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+        .cars-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); 
+            gap: 2rem; 
+        }
+        .car-card { 
+            background: linear-gradient(145deg, #1e293b 0%, #334155 100%); 
+            border-radius: 16px; 
+            overflow: hidden; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+        }
+        .car-image { 
+            height: 200px; 
+            background-size: cover;
+            background-position: center;
+            background-color: #f8fafc;
+        }
+        .car-info { padding: 1.5rem; }
+        .car-info h3 { font-size: 1.5rem; margin-bottom: 0.5rem; color: #f1f5f9; }
+        .car-type { color: #94a3b8; margin-bottom: 0.5rem; }
+        .car-location { color: #60a5fa; margin-bottom: 1rem; }
+        .car-price { 
+            font-size: 1.8rem; 
+            font-weight: bold; 
+            color: #10b981; 
+            margin-bottom: 1rem;
+        }
+        .btn { 
+            padding: 0.75rem 1.5rem; 
+            border: none; 
+            border-radius: 8px; 
+            background: linear-gradient(135deg, #059669 0%, #10b981 100%); 
+            color: white; 
+            cursor: pointer;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <nav class="nav">
+        <div class="brand">Drive Now - Car Rental</div>
+    </nav>
+
+    <div class="container">
+        <div style="text-align: center; margin-bottom: 2rem;">
+            <h1 style="font-size: 2.5rem; margin-bottom: 0.5rem;">Available Cars</h1>
+            <p style="color: rgba(255,255,255,0.9);">Premium car rental service</p>
+        </div>
+        
+        <div class="cars-grid">
+            <div class="car-card">
+                <div class="car-image" style="background-image: url('assets/swift.jpg');"></div>
+                <div class="car-info">
+                    <h3>Maruti Swift</h3>
+                    <p class="car-type">Hatchback</p>
+                    <p class="car-location">All Cities</p>
+                    <div class="car-price">₹1,200/day</div>
+                    <button class="btn">Book Now</button>
+                </div>
+            </div>
+            
+            <div class="car-card">
+                <div class="car-image" style="background-image: url('assets/innova.jpg');"></div>
+                <div class="car-info">
+                    <h3>Toyota Innova</h3>
+                    <p class="car-type">SUV</p>
+                    <p class="car-location">All Cities</p>
+                    <div class="car-price">₹2,800/day</div>
+                    <button class="btn">Book Now</button>
+                </div>
+            </div>
+            
+            <div class="car-card">
+                <div class="car-image" style="background-image: url('assets/creta.jpg');"></div>
+                <div class="car-info">
+                    <h3>Hyundai Creta</h3>
+                    <p class="car-type">SUV</p>
+                    <p class="car-location">All Cities</p>
+                    <div class="car-price">₹2,500/day</div>
+                    <button class="btn">Book Now</button>
+                </div>
+            </div>
+            
+            <div class="car-card">
+                <div class="car-image" style="background-image: url('assets/seltos.jpg');"></div>
+                <div class="car-info">
+                    <h3>Kia Seltos</h3>
+                    <p class="car-type">SUV</p>
+                    <p class="car-location">All Cities</p>
+                    <div class="car-price">₹3,200/day</div>
+                    <button class="btn">Book Now</button>
+                </div>
+            </div>
+            
+            <div class="car-card">
+                <div class="car-image" style="background-image: url('assets/thar.jpg');"></div>
+                <div class="car-info">
+                    <h3>Mahindra Thar</h3>
+                    <p class="car-type">SUV</p>
+                    <p class="car-location">All Cities</p>
+                    <div class="car-price">₹3,500/day</div>
+                    <button class="btn">Book Now</button>
+                </div>
+            </div>
+            
+            <div class="car-card">
+                <div class="car-image" style="background-image: url('assets/x300.jpg');"></div>
+                <div class="car-info">
+                    <h3>Mahindra XUV300</h3>
+                    <p class="car-type">SUV</p>
+                    <p class="car-location">All Cities</p>
+                    <div class="car-price">₹2,800/day</div>
+                    <button class="btn">Book Now</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
